@@ -1,0 +1,7 @@
+flask
+firebase-admin
+pycryptodome
+datetime
+jwt
+tqdm
+flask_cors
