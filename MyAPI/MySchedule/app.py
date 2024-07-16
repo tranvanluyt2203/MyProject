@@ -4,9 +4,9 @@ import datetime
 from firebase_admin import credentials, auth, firestore, db
 import firebase_admin
 from firebase_admin import firestore
-import hashlib
 import json
 from tqdm import tqdm
+from utilies.Password import hash,CheckPasswordFormat
 
 # Create an instance of the Flask class
 app = Flask(__name__)
@@ -22,6 +22,9 @@ firebase_admin.initialize_app(
 db_firestore = firestore.client()
 
 valid_tokens = set()
+
+
+
 @app.route("/", methods=["GET"])
 def home():
     return (
