@@ -7,14 +7,14 @@ import { getAnalytics } from "firebase/analytics";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyD1xLaVB0p3ZILA7Y1j_CIxqI2dPbMwqZA",
-  authDomain: "myschedule-97187.firebaseapp.com",
-  databaseURL: "https://myschedule-97187-default-rtdb.firebaseio.com",
-  projectId: "myschedule-97187",
-  storageBucket: "myschedule-97187.appspot.com",
-  messagingSenderId: "729185053715",
-  appId: "1:729185053715:web:228353c33ea70e3900a3e6",
-  measurementId: "G-GSVNVCP63N"
+  apiKey: "AIzaSyCqTYT9d87vdO4Qi5xC6_QbB9gI7Bbzfp8",
+  authDomain: "myshop-54fbc.firebaseapp.com",
+  databaseURL: "https://myshop-54fbc-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "myshop-54fbc",
+  storageBucket: "myshop-54fbc.appspot.com",
+  messagingSenderId: "642274958778",
+  appId: "1:642274958778:web:868f8b8656b41598c8d183",
+  measurementId: "G-RXXGCHZRBK"
 };
 
 // Initialize Firebase

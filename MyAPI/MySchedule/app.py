@@ -285,8 +285,6 @@ def changePassword():
             .to_dict()
             .get("password")
         )
-        print(oldpassword)
-        print(hash(oldPasswordEnter))
         if hash(oldPasswordEnter) != oldpassword:
             return (
                 jsonify(

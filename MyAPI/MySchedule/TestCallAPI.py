@@ -19,7 +19,7 @@ def register():
     #     re_password = input("Re enter passsword: ")
 
     # data = {"email": email, "password": password}
-    data = {"email": "tranvanluyt12b4@gmail.com", "password": "Travanluyt.2203"}
+    data = {"email": "tranvanluyt12b4@gmail.com", "password": "Tranvanluyt.2203"}
     try:
         # response = requests.post(url, json=data, headers=headers)
         response = requests.post(url, json=data)
@@ -33,7 +33,7 @@ def login():
     print("Login")
     # email = input("Enter email: ")
     # password = input("Enter password: ")
-    data = {"email": "tranvanluyt12b4@gmail.com", "password": "Tranvanluyt.2203"}
+    data = {"email": "tranvanluyt12b4@gmail.com", "password": "Tranvanluyt@2203"} #Tranvanluyt@2203
     try:
         # response = requests.post(url, json=data, headers=headers)
         response = requests.post(url, json=data)
@@ -80,8 +80,8 @@ def change_password():
     headers = {"Authorization": SECRET_KEY + accessToken}
     try:
         data = {
-            "oldPassword": "Travanluyt.2203",
-            "newPassword": "Tranvanluyt.2203",
+            "oldPassword": "Tranvanluyt.2203",
+            "newPassword": "Tranvanluyt@2203",
         }
         response = requests.post(url, headers=headers, json=data)
         print("Status code", response.status_code)

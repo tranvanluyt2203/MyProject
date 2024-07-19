@@ -10,11 +10,11 @@ API_USER = "/api/v1/users/"
 SECRET_KEY = "SCHEDULE"
 
 cred = credentials.Certificate(
-    "Firebase/myschedule-97187-firebase-adminsdk-306cs-00a5a22c4c.json"
+    "Firebase/myshop-54fbc-firebase-adminsdk-ysf7c-539c6b218d.json"
 )
 firebase_admin.initialize_app(
     cred,
-    {"databaseURL": "https://myschedule-97187-default-rtdb.firebaseio.com"},
+    {"databaseURL": "https://myshop-54fbc-default-rtdb.asia-southeast1.firebasedatabase.app"},
 )
 db_firestore = firestore.client()
 
