@@ -4,7 +4,7 @@ from APIs.ListAPIURL import *
 global accessToken
 accessToken = ""
 global SECRET_KEY
-SECRET_KEY = "SCHEDULE"
+SECRET_KEY = "SHOP"
 
 
 def register():

@@ -7,7 +7,7 @@ DOMAIN = "http://127.0.0.1:5000"
 
 API_USER = "/api/v1/users/"
 
-SECRET_KEY = "SCHEDULE"
+SECRET_KEY = "SHOP"
 
 cred = credentials.Certificate(
     "Firebase/myshop-54fbc-firebase-adminsdk-ysf7c-539c6b218d.json"

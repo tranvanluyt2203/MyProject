@@ -50,7 +50,7 @@ def register():
         db.reference("operationTime").child(user.uid).set(
             {"timeRegister": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
         )
-        accessToken = "schedule" + user.uid + "app"
+        accessToken = "shop" + user.uid + "app"
         user_data = {
             "accessToken": accessToken,
             "email": email,
