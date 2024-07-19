@@ -5,10 +5,12 @@ import firebase_admin
 
 DOMAIN = "http://127.0.0.1:5000"
 
+API_USER = "/api/v1/users/"
+
 SECRET_KEY = "SCHEDULE"
 
 cred = credentials.Certificate(
-    "./Firebase/myschedule-97187-firebase-adminsdk-306cs-00a5a22c4c.json"
+    "Firebase/myschedule-97187-firebase-adminsdk-306cs-00a5a22c4c.json"
 )
 firebase_admin.initialize_app(
     cred,
