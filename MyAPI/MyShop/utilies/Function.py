@@ -52,4 +52,4 @@ def checkLogin(headers):
 
 
 def get_userId_from_headers(headers):
-    return headers.split(SECRET_KEY)[1].split("SHOP")[1].split("app")[0]
+    return headers.split(SECRET_KEY)[1].split("shop")[1].split("app")[0]
