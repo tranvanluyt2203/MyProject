@@ -139,7 +139,7 @@ def loginStore():
         if response.status_code == 200:
             global accessToken
             accessToken = response.json().get("data").get("accessToken")
-        
+
     except requests.RequestException as e:
         print("Request failed:", e)
 
@@ -160,20 +160,59 @@ def logoutStore():
 
 
 def change_password_Store():
-    return
+    url = BASE_API + CHANGE_PASSWORD_STORE
+    headers = {"Authorization": SECRET_KEY + accessToken}
+    data = {
+        "oldPassword": "HelloShop@2203",
+        "newPassword": "HelloShop@2203",
+    }
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
 
 
 def get_profile_Store():
-    return
+    url = BASE_API + INFOR_STORE
+    headers = {"Authorization": SECRET_KEY + accessToken}
+    try:
+        response = requests.get(url, headers=headers)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
 
 
 def update_profile_Store():
+    url = BASE_API + UPDATE_INFOR_STORE
+    headers = {"Authorization": SECRET_KEY + accessToken}
+    try:
+        data = {
+            "address": "Liên Chiểu - Đà Nẵng",
+            "avatar": "https://img.freepik.com/free-vector/cartoon-style-cafe-front-shop-view_134830-697.jpg",
+            "dayOpen": "21/07/2024",
+            "introduction": "tittle hello this is shop abc bán quần áo \n hỗn hợp đầy đủ yêu cầu ",
+            "license": "",
+            "listProduct": [],
+            "nameShop": "TestShop",
+            "phoneNumber": "01223456789",
+            "rateShop": 5,
+        }
+        response = requests.post(url, headers=headers, json=data)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
     return
 
 
 def add_product():
     return
 
+def get_product():
+    return
 
 def delete_product():
     return
@@ -225,7 +264,8 @@ def FunctionStore():
     print("5.Get Infor Store")
     print("6.Update Infor Store")
     print("7.Add Product")
-    print("8.Delete Product")
+    print("8.Get Product")
+    print("9.Delete Product")
 
     print("0.To out")
 
@@ -282,6 +322,8 @@ def SelectFuntionStore():
             case 7:
                 add_product()
             case 8:
+                get_product()
+            case 9:
                 delete_product()
             case 0:
                 return
