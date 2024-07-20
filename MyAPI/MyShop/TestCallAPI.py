@@ -7,6 +7,9 @@ global SECRET_KEY
 SECRET_KEY = "SHOP"
 
 
+# ---------------------------------------USERS-----------------------------------------------
+
+
 def register():
     url = BASE_API + REGISTER
     print("Register")
@@ -33,7 +36,10 @@ def login():
     print("Login")
     # email = input("Enter email: ")
     # password = input("Enter password: ")
-    data = {"email": "tranvanluyt12b4@gmail.com", "password": "Tranvanluyt@2203"} #Tranvanluyt@2203
+    data = {
+        "email": "tranvanluyt12b4@gmail.com",
+        "password": "Tranvanluyt@2203",
+    }  # Tranvanluyt@2203
     try:
         # response = requests.post(url, json=data, headers=headers)
         response = requests.post(url, json=data)
@@ -105,20 +111,136 @@ def logout():
         print("Request failed:", e)
 
 
-def PrintSelect():
-    print("Enter select")
+# ---------------------------------------STORE--------------------------------------------------
+def registerStore():
+    url = BASE_API + REGISTER_NEW_STORE
+    data = {
+        "username": "helloShop",
+        "password": "HelloShop@2203",
+    }
+    try:
+        response = requests.post(url, json=data)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
+
+
+def loginStore():
+    url = BASE_API + LOGIN_STORE
+    data = {
+        "username": "helloShop",
+        "password": "HelloShop@2203",
+    }
+    try:
+        response = requests.post(url, json=data)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+        if response.status_code == 200:
+            global accessToken
+            accessToken = response.json().get("data").get("accessToken")
+        
+    except requests.RequestException as e:
+        print("Request failed:", e)
+
+
+def logoutStore():
+    url = BASE_API + LOGOUT_STORE
+    print("Logout")
+    global accessToken
+    headers = {"Authorization": SECRET_KEY + accessToken}
+    try:
+        response = requests.post(url, headers=headers)
+        if response.status_code == 200:
+            accessToken = ""
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
+
+
+def change_password_Store():
+    return
+
+
+def get_profile_Store():
+    return
+
+
+def update_profile_Store():
+    return
+
+
+def add_product():
+    return
+
+
+def delete_product():
+    return
+
+
+# ---------------------------------------PRODUCT-----------------------------------------------
+def pushProduct():
+    return
+
+
+def getInforProduct():
+    return
+
+
+def updateInforProduct():
+    return
+
+
+# _______________________________________________________________________________________________
+
+
+def SelectObject():
+    print("Select Object:")
+    print("1.User")
+    print("2.Store")
+    print("3.Product")
+    select = int(input("Your Select: "))
+    return select
+
+
+def FunctionUser():
+    print("Enter select function for user")
     print("1.Register")
     print("2.Login")
-    print("3.Get Profile")
-    print("4.Update profile")
-    print("5.Change Password")
-    print("10.Logout")
+    print("3.Logout")
+    print("4.Change Password")
+    print("5.Get Profile")
+    print("6.Update profile")
 
     print("0.To out")
 
 
-def main():
-    PrintSelect()
+def FunctionStore():
+    print("Enter select function for store")
+    print("1.Register")
+    print("2.Login")
+    print("3.Logout")
+    print("4.Change Password")
+    print("5.Get Infor Store")
+    print("6.Update Infor Store")
+    print("7.Add Product")
+    print("8.Delete Product")
+
+    print("0.To out")
+
+
+def FunctionProduct():
+    print("Enter select function for product")
+    print("1. Push product")
+    print("2. Infor product")
+    print("3. Update infor product")
+
+    print("0.To out")
+
+
+def SelectFunctionUser():
+    FunctionUser()
     select = int(input("Type your select: "))
     while select != 0:
         match select:
@@ -127,17 +249,72 @@ def main():
             case 2:
                 login()
             case 3:
-                get_profile()
-            case 4:
-                update_profile()
-            case 5:
-                change_password()
-            case 10:
                 logout()
+            case 4:
+                change_password()
+            case 5:
+                get_profile()
+            case 6:
+                update_profile()
             case 0:
                 return
-        PrintSelect()
+        FunctionUser()
         select = int(input("Type your select: "))
+
+
+def SelectFuntionStore():
+    FunctionStore()
+    select = int(input("Type your select: "))
+    while select != 0:
+        match select:
+            case 1:
+                registerStore()
+            case 2:
+                loginStore()
+            case 3:
+                logoutStore()
+            case 4:
+                change_password_Store()
+            case 5:
+                get_profile_Store()
+            case 6:
+                update_profile_Store()
+            case 7:
+                add_product()
+            case 8:
+                delete_product()
+            case 0:
+                return
+        FunctionStore()
+        select = int(input("Type your select: "))
+
+
+def SelectFunctionProduct():
+    while select != 0:
+        match select:
+            case 1:
+                pushProduct()
+            case 2:
+                getInforProduct()
+            case 3:
+                updateInforProduct()
+            case 0:
+                return
+        FunctionProduct()
+        select = int(input("Type your select: "))
+
+
+def main():
+    yes = "y"
+    while yes == "y":
+        select_ = SelectObject()
+        if select_ == 1:
+            SelectFunctionUser()
+        if select_ == 2:
+            SelectFuntionStore()
+        if select_ == 3:
+            SelectFunctionProduct()
+        yes = input("Do you want test ? (y-yes or skip to exit) : ")
 
 
 if __name__ == "__main__":
