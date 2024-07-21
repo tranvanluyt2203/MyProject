@@ -139,7 +139,7 @@ def loginStore():
         if response.status_code == 200:
             global accessToken
             accessToken = response.json().get("data").get("accessToken")
-        
+
     except requests.RequestException as e:
         print("Request failed:", e)
 
@@ -160,23 +160,127 @@ def logoutStore():
 
 
 def change_password_Store():
-    return
+    url = BASE_API + CHANGE_PASSWORD_STORE
+    headers = {"Authorization": SECRET_KEY + accessToken}
+    data = {
+        "oldPassword": "HelloShop@2203",
+        "newPassword": "HelloShop@2203",
+    }
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
 
 
 def get_profile_Store():
-    return
+    url = BASE_API + INFOR_STORE
+    headers = {"Authorization": SECRET_KEY + accessToken}
+    try:
+        response = requests.get(url, headers=headers)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
 
 
 def update_profile_Store():
-    return
+    url = BASE_API + UPDATE_INFOR_STORE
+    headers = {"Authorization": SECRET_KEY + accessToken}
+    try:
+        data = {
+            "address": "Liên Chiểu - Đà Nẵng",
+            "avatar": "https://img.freepik.com/free-vector/cartoon-style-cafe-front-shop-view_134830-697.jpg",
+            "dayOpen": "21/07/2024",
+            "introduction": "tittle hello this is shop abc bán quần áo \n hỗn hợp đầy đủ yêu cầu ",
+            "license": "",
+            "listProduct": [],
+            "nameShop": "TestShop",
+            "phoneNumber": "01223456789",
+            "rateShop": 5,
+        }
+        response = requests.post(url, headers=headers, json=data)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
 
 
 def add_product():
-    return
+    url = BASE_API + ADD_PRODUCT_TO_STORE
+    headers = {"Authorization": SECRET_KEY + accessToken}
+    try:
+        data = {
+            "productName": "Kẹo trái cây",
+            "productImage": "https://png.pngtree.com/png-vector/20190726/ourlarge/pngtree-flat-candy--icon--vector-png-image_1592903.jpg",
+            "description": "kẹo chất lượng cao, sản phẩm được đánh giá tốt abc hello xyz test description",
+            "category": "Ăn vặt",
+            "classify": {
+                "Việt quất": 25,
+                "Dâu tây": 20,
+                "Chanh leo": 15,
+                "Dứa": 10,
+                "Dừa": 25,
+                "Táo": 5,
+            },
+            "price": "2500 VNĐ",
+            "discount": "10%",
+            "rate": 5,
+            "detail": {
+                "Xuất xứ": "Việt Nam",
+                "Gửi từ": "Đà Nẵng",
+            },
+        }
+        data["numberProduct"] = sum(data["classify"].values())
+        response = requests.post(
+            url,
+            headers=headers,
+            json=data,
+        )
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
+
+
+def get_product():
+    url = BASE_API + GET_PRODUCTS_STORE
+    storeId = "06d276f0fcb539cdad96ce03a0d56aab153e39934b7da63256501395fa92f854"
+    data = {
+        "storeId": storeId,
+    }
+    try:
+        response = requests.get(url, json=data)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
 
 
 def delete_product():
-    return
+    url = BASE_API + DELETE_PRODUCT
+    headers = {"Authorization": SECRET_KEY + accessToken}
+    productId = "product06d276f0fcb539cdad96ce03a0d56aab153e39934b7da63256501395fa92f854-TestShop-0"
+    data = {
+        "productId": productId,
+    }
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
+
+
+def get_list_store():
+    url = BASE_API + GET_LIST_STORE
+    try:
+        response = requests.get(url)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
 
 
 # ---------------------------------------PRODUCT-----------------------------------------------
@@ -225,7 +329,9 @@ def FunctionStore():
     print("5.Get Infor Store")
     print("6.Update Infor Store")
     print("7.Add Product")
-    print("8.Delete Product")
+    print("8.Get Product")
+    print("9.Delete Product")
+    print("10.Get List Store")
 
     print("0.To out")
 
@@ -282,7 +388,11 @@ def SelectFuntionStore():
             case 7:
                 add_product()
             case 8:
+                get_product()
+            case 9:
                 delete_product()
+            case 10:
+                get_list_store()
             case 0:
                 return
         FunctionStore()

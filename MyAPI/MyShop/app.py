@@ -287,13 +287,8 @@ def changePassword():
                 400,
             )
         userId = get_userId_from_headers(headers)
-        oldpassword = (
-            db_firestore.collection(DATABASE_USER_NAME)
-            .document(userId)
-            .get()
-            .to_dict()
-            .get("password")
-        )
+        ref = db_firestore.collection(DATABASE_USER_NAME).document(userId)
+        oldpassword = ref.get().to_dict().get("password")
         if hash(oldPasswordEnter) != oldpassword:
             return (
                 jsonify(
@@ -324,9 +319,7 @@ def changePassword():
                 ).update(
                     {TIME_CHANGE_PASSWORD: datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
                 )
-                db_firestore.collection("users").document(userId).update(
-                    {"password": hash(newPassword)}
-                )
+                ref.update({"password": hash(newPassword)})
                 return (
                     jsonify(
                         {
@@ -437,6 +430,9 @@ def loginStore():
                         "success": False,
                         "status": 400,
                         "message": "Password is not format",
+                        "data": {
+                            "username": username,
+                        },
                     }
                 ),
                 400,
@@ -520,9 +516,290 @@ def logoutStore():
         )
 
 
+@app.route(INFOR_STORE, methods=["GET"])
+def getInforStore():
+    headers = request.headers.get("Authorization")
+    isNotLogin = checkLogin(headers)
+    if isNotLogin:
+        return isNotLogin
+    try:
+        storeId = get_storeId_from_headers(headers)
+        inforStore = (
+            db_firestore.collection(DATABASE_INFOR_STORE_NAME)
+            .document(storeId)
+            .get()
+            .to_dict()
+        )
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "status": 200,
+                    "message": "Get infor store success",
+                    "data": {
+                        "profile": inforStore,
+                    },
+                },
+            ),
+            201,
+        )
+    except Exception as e:
+        return (
+            jsonify(
+                {"error": str(e)},
+            ),
+            400,
+        )
 
 
+@app.route(UPDATE_INFOR_STORE, methods=["POST"])
+def updateInforStore():
+    headers = request.headers.get("Authorization")
+    isNotLogin = checkLogin(headers)
+    if isNotLogin:
+        return isNotLogin
+    try:
+        dataUpdateStore = request.json
+        if dataUpdateStore:
+            storeId = get_storeId_from_headers(headers)
+            db.reference(DATABASE_STORE_NAME).child(DATABASE_OPERATION_NAME).child(
+                storeId
+            ).update({TIME_UPDATE: datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+            db_firestore.collection(DATABASE_INFOR_STORE_NAME).document(storeId).update(
+                dataUpdateStore
+            )
+            return (
+                jsonify(
+                    {
+                        "success": True,
+                        "status": 200,
+                        "message": "Update Infor store success",
+                    },
+                ),
+                200,
+            )
+    except Exception as e:
+        return (
+            jsonify(
+                {"error": str(e)},
+            ),
+            400,
+        )
 
+
+@app.route(CHANGE_PASSWORD_STORE, methods=["POST"])
+def changePasswordStore():
+    headers = request.headers.get("Authorization")
+    isNotLogin = checkLogin(headers)
+    if isNotLogin:
+        return isNotLogin
+    try:
+        oldPasswordEnter = request.json.get("oldPassword")
+        if not (CheckPasswordFormat(oldPasswordEnter)):
+            return (
+                jsonify(
+                    {
+                        "success": False,
+                        "status": 400,
+                        "message": "Password is not format",
+                    }
+                ),
+                400,
+            )
+        storeId = get_storeId_from_headers(headers)
+        ref = db_firestore.collection(DATABASE_STORE_NAME).document(storeId)
+        oldPassword = ref.get().to_dict().get("password")
+
+        if hash(oldPasswordEnter) != oldPassword:
+            return (
+                jsonify(
+                    {
+                        "success": False,
+                        "status": 400,
+                        "message": "Old Password is wrong",
+                    }
+                ),
+                400,
+            )
+        else:
+            newPassword = request.json.get("newPassword")
+            if not (CheckPasswordFormat(newPassword)):
+                return (
+                    jsonify(
+                        {
+                            "success": False,
+                            "status": 400,
+                            "message": "New Password is not format",
+                        }
+                    ),
+                    400,
+                )
+            else:
+                db.reference(DATABASE_STORE_NAME).child(DATABASE_OPERATION_NAME).child(
+                    storeId
+                ).update(
+                    {TIME_CHANGE_PASSWORD: datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+                )
+                ref.update({"password": hash(newPassword)})
+                return (
+                    jsonify(
+                        {
+                            "success": True,
+                            "status": 200,
+                            "message": "Change Password success",
+                        }
+                    ),
+                    200,
+                )
+
+    except Exception as e:
+        return (
+            jsonify(
+                {"error": str(e)},
+            ),
+            400,
+        )
+
+
+@app.route(ADD_PRODUCT_TO_STORE, methods=["POST"])
+def addProductToStore():
+    headers = request.headers.get("Authorization")
+    isNotLogin = checkLogin(headers)
+    if isNotLogin:
+        return isNotLogin
+    try:
+        dataProduct = request.json
+        storeId = get_storeId_from_headers(headers)
+        refStore = db_firestore.collection(DATABASE_INFOR_STORE_NAME).document(storeId)
+        nameStore = refStore.get().to_dict().get("nameShop")
+        productId = (
+            "product"
+            + storeId
+            + "-"
+            + nameStore
+            + "-"
+            + str(len(refStore.get().to_dict().get("listProduct")))
+        )
+        print(productId)
+        db.reference(DATABASE_PRODUCT_NAME).child(DATABASE_OPERATION_NAME).child(
+            productId
+        ).set({TIME_APPEAR_PRODUCT: datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+        db.reference(DATABASE_STORE_NAME).child(DATABASE_OPERATION_NAME).child(
+            storeId
+        ).update(
+            {TIME_ADD_PRODUCT_TO_STORE: datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+        )
+        refStore.update(
+            {
+                "listProduct": firestore.ArrayUnion(
+                    [
+                        {
+                            productId: dataProduct,
+                        }
+                    ]
+                )
+            }
+        )
+        dataProduct["nameStore"] = nameStore
+        db_firestore.collection(DATABASE_PRODUCT_NAME).document(productId).set(
+            dataProduct
+        )
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "status": 200,
+                    "message": "Add Product Access",
+                },
+            ),
+            200,
+        )
+    except Exception as e:
+        return (
+            jsonify(
+                {"error": str(e)},
+            ),
+            400,
+        )
+
+
+@app.route(GET_LIST_STORE, methods=["GET"])
+def getListStore():
+    try:
+        docsStore = db_firestore.collection(DATABASE_INFOR_STORE_NAME).stream()
+        listStore = {}
+        for store in docsStore:
+            listStore[store.id] = store.to_dict()
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "status": 200,
+                    "data": {
+                        "listProduct": listStore,
+                    },
+                }
+            ),
+            201,
+        )
+    except Exception as e:
+        return (
+            jsonify(
+                {"error": str(e)},
+            ),
+            400,
+        )
+
+
+@app.route(GET_PRODUCTS_STORE, methods=["GET"])
+def get_products_store():
+    try:
+        storeId = request.json.get("storeId")
+        listProduct = (
+            db_firestore.collection(DATABASE_INFOR_STORE_NAME)
+            .document(storeId)
+            .get()
+            .to_dict()
+            .get("listProduct")
+        )
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "status": 200,
+                    "data": {
+                        "listProduct": listProduct,
+                    },
+                }
+            ),
+            201,
+        )
+    except Exception as e:
+        return (
+            jsonify(
+                {"error": str(e)},
+            ),
+            400,
+        )
+
+
+@app.route(DELETE_PRODUCT, methods=["POST"])
+def deleteProduct():
+    headers = request.headers.get("Authorization")
+    isNotLogin = checkLogin(headers)
+    if isNotLogin:        
+        return isNotLogin
+    try:
+        productId = request.json.get("productId")
+        print(productId)
+        # ..............
+    except Exception as e:
+        return (
+            jsonify(
+                {"error": str(e)},
+            ),
+            400,
+        )
 
 
 # -------------------------------------------------------------------------------------------
