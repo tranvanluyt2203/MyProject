@@ -205,14 +205,48 @@ def update_profile_Store():
         print("Response", response.json())
     except requests.RequestException as e:
         print("Request failed:", e)
-    return
 
 
 def add_product():
-    return
+    url = BASE_API + ADD_PRODUCT_TO_STORE
+    headers = {"Authorization": SECRET_KEY + accessToken}
+    try:
+        data = {
+            "productName": "Kẹo trái cây",
+            "productImage": "https://png.pngtree.com/png-vector/20190726/ourlarge/pngtree-flat-candy--icon--vector-png-image_1592903.jpg",
+            "description": "kẹo chất lượng cao, sản phẩm được đánh giá tốt abc hello xyz test description",
+            "category": "Ăn vặt",
+            "classify": {
+                "Việt quất": 25,
+                "Dâu tây": 20,
+                "Chanh leo": 15,
+                "Dứa": 10,
+                "Dừa": 25,
+                "Táo": 5,
+            },
+            "price": "2500 VNĐ",
+            "discount": "10%",
+            "rate": 5,
+            "detail": {
+                "Xuất xứ": "Việt Nam",
+                "Gửi từ": "Đà Nẵng",
+            },
+        }
+        data["numberProduct"] = sum(data["classify"].values())
+        response = requests.post(
+            url,
+            headers=headers,
+            json=data,
+        )
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
+
 
 def get_product():
     return
+
 
 def delete_product():
     return

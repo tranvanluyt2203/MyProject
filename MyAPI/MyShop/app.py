@@ -430,6 +430,9 @@ def loginStore():
                         "success": False,
                         "status": 400,
                         "message": "Password is not format",
+                        "data": {
+                            "username": username,
+                        },
                     }
                 ),
                 400,
@@ -658,8 +661,66 @@ def changePasswordStore():
         )
 
 
-
-
+@app.route(ADD_PRODUCT_TO_STORE, methods=["POST"])
+def addProductToStore():
+    headers = request.headers.get("Authorization")
+    isNotLogin = checkLogin(headers)
+    if isNotLogin:
+        return isNotLogin
+    try:
+        dataProduct = request.json
+        storeId = get_storeId_from_headers(headers)
+        refStore = db_firestore.collection(DATABASE_INFOR_STORE_NAME).document(storeId)
+        nameStore = refStore.get().to_dict().get("nameShop")
+        productId = (
+            "product"
+            + storeId
+            + "-"
+            + nameStore
+            + "-"
+            + str(len(refStore.get().to_dict().get("listProduct")))
+        )
+        print(productId)
+        db.reference(DATABASE_PRODUCT_NAME).child(DATABASE_OPERATION_NAME).child(
+            productId
+        ).set({TIME_APPEAR_PRODUCT: datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+        db.reference(DATABASE_STORE_NAME).child(DATABASE_OPERATION_NAME).child(
+            storeId
+        ).update(
+            {TIME_ADD_PRODUCT_TO_STORE: datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+        )
+        refStore.update(
+            {
+                "listProduct": firestore.ArrayUnion(
+                    [
+                        {
+                            productId: dataProduct,
+                        }
+                    ]
+                )
+            }
+        )
+        dataProduct["nameStore"] = nameStore
+        db_firestore.collection(DATABASE_PRODUCT_NAME).document(productId).set(
+            dataProduct
+        )
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "status": 200,
+                    "message": "Add Product Access",
+                },
+            ),
+            200,
+        )
+    except Exception as e:
+        return (
+            jsonify(
+                {"error": str(e)},
+            ),
+            400,
+        )
 
 
 # -------------------------------------------------------------------------------------------

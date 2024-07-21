@@ -27,6 +27,8 @@ DATABASE_CART_NAME = "carts"
 
 DATABASE_PRODUCT_NAME = "products"
 
+DATABASE_CATEGORIES_NAME = "categories"
+
 
 # ----------------------REALTIME------------------------
 
@@ -39,6 +41,7 @@ TIME_UPDATE = "timeUpdateInfor"
 TIME_CHANGE_PASSWORD = "timeChangepassword"
 TIME_ADD_PRODUCT_TO_STORE = "timeAddProductStore"
 TIME_ADD_PRODUCT_TO_CART = "timeAddProductCart"
+TIME_APPEAR_PRODUCT = "timeAppearProduct"
 
 
 #===============================================================================================================
