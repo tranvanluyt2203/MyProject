@@ -723,6 +723,85 @@ def addProductToStore():
         )
 
 
+@app.route(GET_LIST_STORE, methods=["GET"])
+def getListStore():
+    try:
+        docsStore = db_firestore.collection(DATABASE_INFOR_STORE_NAME).stream()
+        listStore = {}
+        for store in docsStore:
+            listStore[store.id] = store.to_dict()
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "status": 200,
+                    "data": {
+                        "listProduct": listStore,
+                    },
+                }
+            ),
+            201,
+        )
+    except Exception as e:
+        return (
+            jsonify(
+                {"error": str(e)},
+            ),
+            400,
+        )
+
+
+@app.route(GET_PRODUCTS_STORE, methods=["GET"])
+def get_products_store():
+    try:
+        storeId = request.json.get("storeId")
+        listProduct = (
+            db_firestore.collection(DATABASE_INFOR_STORE_NAME)
+            .document(storeId)
+            .get()
+            .to_dict()
+            .get("listProduct")
+        )
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "status": 200,
+                    "data": {
+                        "listProduct": listProduct,
+                    },
+                }
+            ),
+            201,
+        )
+    except Exception as e:
+        return (
+            jsonify(
+                {"error": str(e)},
+            ),
+            400,
+        )
+
+
+@app.route(DELETE_PRODUCT, methods=["POST"])
+def deleteProduct():
+    headers = request.headers.get("Authorization")
+    isNotLogin = checkLogin(headers)
+    if isNotLogin:        
+        return isNotLogin
+    try:
+        productId = request.json.get("productId")
+        print(productId)
+        # ..............
+    except Exception as e:
+        return (
+            jsonify(
+                {"error": str(e)},
+            ),
+            400,
+        )
+
+
 # -------------------------------------------------------------------------------------------
 # -----------------------------------PRODUCTS------------------------------------------------
 # -------------------------------------------------------------------------------------------

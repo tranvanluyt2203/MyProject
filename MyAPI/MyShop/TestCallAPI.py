@@ -245,11 +245,42 @@ def add_product():
 
 
 def get_product():
-    return
+    url = BASE_API + GET_PRODUCTS_STORE
+    storeId = "06d276f0fcb539cdad96ce03a0d56aab153e39934b7da63256501395fa92f854"
+    data = {
+        "storeId": storeId,
+    }
+    try:
+        response = requests.get(url, json=data)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
 
 
 def delete_product():
-    return
+    url = BASE_API + DELETE_PRODUCT
+    headers = {"Authorization": SECRET_KEY + accessToken}
+    productId = "product06d276f0fcb539cdad96ce03a0d56aab153e39934b7da63256501395fa92f854-TestShop-0"
+    data = {
+        "productId": productId,
+    }
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
+
+
+def get_list_store():
+    url = BASE_API + GET_LIST_STORE
+    try:
+        response = requests.get(url)
+        print("Status code", response.status_code)
+        print("Response", response.json())
+    except requests.RequestException as e:
+        print("Request failed:", e)
 
 
 # ---------------------------------------PRODUCT-----------------------------------------------
@@ -300,6 +331,7 @@ def FunctionStore():
     print("7.Add Product")
     print("8.Get Product")
     print("9.Delete Product")
+    print("10.Get List Store")
 
     print("0.To out")
 
@@ -359,6 +391,8 @@ def SelectFuntionStore():
                 get_product()
             case 9:
                 delete_product()
+            case 10:
+                get_list_store()
             case 0:
                 return
         FunctionStore()

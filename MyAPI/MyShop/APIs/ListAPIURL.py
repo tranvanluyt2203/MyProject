@@ -32,5 +32,6 @@ ADD_PRODUCT_TO_STORE = API_STORE + "addProductsStore"
 DELETE_PRODUCT = API_STORE + "deleteProduct"
 CHANGE_PASSWORD_STORE = API_STORE + "changePasswordStore"
 LOGOUT_STORE = API_STORE + "logoutStore"
+GET_LIST_STORE = API_STORE + "getListStore"
 
 
