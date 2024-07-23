@@ -7,7 +7,7 @@ DOMAIN = "http://127.0.0.1:5000"
 
 API_USER = "/api/v1/users/"
 
-API_CART = "api/v1/cart/"
+API_CART = "/api/v1/cart/"
 
 API_PRODUCT = "/api/v1/products/"
 
